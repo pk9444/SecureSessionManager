@@ -52,11 +52,11 @@ func login3(response http.ResponseWriter, request *http.Request) {
 		http.Redirect(response, request, "/actions", http.StatusSeeOther)
 
 		//role assignment
-		if username == usersArray[0] && password == credentials[usersArray[0]] {
+		if username == usersArray[0] && password == "123" {
 			assignedRole = roles[0]
-		} else if username == usersArray[1] && password == credentials[usersArray[1]] {
+		} else if username == usersArray[1] && password == "456" {
 			assignedRole = roles[1]
-		} else if username == usersArray[2] && password == credentials[usersArray[2]] {
+		} else if username == usersArray[2] && password == "789" {
 			assignedRole = roles[2]
 		}
 
@@ -120,14 +120,16 @@ func private3(response http.ResponseWriter, request *http.Request) {
 	//---------------------------------------------------------------//
 	if assignedRole == "admin" {
 		session, _ := store3.Get(request, "sessionkey")
-		username2 := session.Values["username"]
+		username := session.Values["username"]
 		data := map[string]interface{}{
-			"username": username2,
+			"username": username,
 		}
 		t, _ := template.ParseFiles("components/private.html")
 		t.Execute(response, data)
-	} else if assignedRole == "assistant" || assignedRole == "alien" {
-		io.WriteString(response, "Access Denied")
+	} else if assignedRole == "assistant" {
+		io.WriteString(response, "Private Access Denied - Assistant Try Protected ...")
+	} else if assignedRole == "alien" {
+		io.WriteString(response, "Unauthorized Alien - Access Denied ...")
 	}
 
 }
@@ -139,18 +141,16 @@ func protected3(response http.ResponseWriter, request *http.Request) {
 	// username := request.Form.Get("username")
 	// password := request.Form.Get("password")
 
-	if assignedRole == "alien" {
-
-		io.WriteString(response, "Access Denied")
-
-	} else if assignedRole == "admin" || assignedRole == "assistant" {
+	if assignedRole == "admin" || assignedRole == "assistant" {
 		session, _ := store3.Get(request, "sessionkey")
-		username2 := session.Values["username"]
+		username := session.Values["username"]
 		data := map[string]interface{}{
-			"username": username2,
+			"username": username,
 		}
 		t, _ := template.ParseFiles("components/protected.html")
 		t.Execute(response, data)
+	} else if assignedRole == "alien" {
+		io.WriteString(response, "Unauthorized Alien - Protected Access Denied ...")
 	}
 	// session, _ := store3.Get(request, "sessionkey")
 	// username2 := session.Values["username"]
@@ -167,7 +167,7 @@ func logout3(response http.ResponseWriter, request *http.Request) {
 	session, _ := store3.Get(request, "sessionkey")
 	session.Options.MaxAge = -1 //immediately expire the cookie when its saved
 	//session.Save(request, response)
-	http.Redirect(response, request, "/logout", http.StatusSeeOther)
+	//http.Redirect(response, request, "/logout", http.StatusSeeOther)
 
 	//session, _ := store3.Get(request, "sessionkey")
 
