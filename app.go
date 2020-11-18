@@ -11,7 +11,20 @@ import (
 var store3 = sessions.NewCookieStore([]byte("sessionkey"))
 
 var roles = []string{"admin", "assistant", "alien"}
+
 var assignedRole string
+
+// type ROLE struct {
+// 	role string //assigned role
+// }
+
+// func (p *ROLE) setRole(role string) {
+// 	p.role = role
+// }
+
+// func (p ROLE) getRole() string {
+// 	return p.role
+// }
 
 //--------------------------------------------------------------------------------------//
 
@@ -52,13 +65,13 @@ func login3(response http.ResponseWriter, request *http.Request) {
 		http.Redirect(response, request, "/actions", http.StatusSeeOther)
 
 		//role assignment
-		if username == usersArray[0] && password == "123" {
-			assignedRole = roles[0]
-		} else if username == usersArray[1] && password == "456" {
-			assignedRole = roles[1]
-		} else if username == usersArray[2] && password == "789" {
-			assignedRole = roles[2]
-		}
+		// if username == usersArray[0] && password == "123" {
+		// 	assignedRole = roles[0]
+		// } else if username == usersArray[1] && password == "456" {
+		// 	assignedRole = roles[1]
+		// } else if username == usersArray[2] && password == "789" {
+		// 	assignedRole = roles[2]
+		// }
 
 	} else {
 
@@ -68,6 +81,23 @@ func login3(response http.ResponseWriter, request *http.Request) {
 		t, _ := template.ParseFiles("components/login.html")
 		t.Execute(response, data)
 	}
+
+	//role assignment
+	if username == usersArray[0] && password == "123" {
+		assignedRole = roles[0]
+	} else if username == usersArray[1] && password == "456" {
+		assignedRole = roles[1]
+	} else if username == usersArray[2] && password == "789" {
+		assignedRole = roles[2]
+	}
+	// switch {
+	// case username == usersArray[0]:
+	// 	assignedRole = roles[0]
+	// case username == usersArray[1]:
+	// 	assignedRole = roles[1]
+	// case username == usersArray[2]:
+	// 	assignedRole = roles[2]
+	// }
 
 	//---------uncomment later if not tested ----------//
 	// if username == usersArray[0] && password == credentials["sherlock"] {
