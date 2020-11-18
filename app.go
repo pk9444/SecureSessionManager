@@ -167,7 +167,7 @@ func logout3(response http.ResponseWriter, request *http.Request) {
 	session, _ := store3.Get(request, "sessionkey")
 	session.Options.MaxAge = -1 //immediately expire the cookie when its saved
 	//session.Save(request, response)
-	//http.Redirect(response, request, "/logout", http.StatusSeeOther)
+	http.Redirect(response, request, "/logout", http.StatusSeeOther)
 
 	//session, _ := store3.Get(request, "sessionkey")
 
